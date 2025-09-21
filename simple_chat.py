@@ -22,19 +22,12 @@ def send_messages():
 
 # Function to receive chat messages
 def receive_messages():
-    def packet_filter(pkt):
-        # Filter packets: UDP, from peer, to us, on the correct port
-        return (IP in pkt and UDP in pkt and
-                pkt[IP].src == PEER_IP and pkt[IP].dst == MY_IP and
-                pkt[ICMP].type == 8)
-
     def handle_packet(pkt):
-        if Raw in pkt:
-            print(f"\nPeer: {pkt[Raw].load.decode('utf-8', errors='ignore')}\nYou: ", end="")
+        if IP in pkt and ICMP in pkt and pkt[IP].src == PEER_IP:
+            if Raw in pkt:
+                print(f"\nPeer: {pkt[Raw].load.decode(errors='ignore')}\nYou: ", end="")
 
-    # Sniff packets matching the filter
-    sniff(iface=INTERFACE, filter="icmp", prn=handle_packet, lfilter=packet_filter)
-
+    sniff(iface=INTERFACE, filter="icmp", prn=handle_packet)
 # Main function to start the chat
 def main():
     print("Starting bidirectional chat. Type 'exit' to quit.")
