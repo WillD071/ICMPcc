@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# simple_chat.py using UDP port
 from scapy.all import *
 import threading
 import time
@@ -18,7 +17,7 @@ def send_messages():
             print("Chat ended.")
             break
         # Create and send a UDP packet with the message as payload
-        packet = IP(dst=PEER_IP) / UDP(sport=CHAT_PORT, dport=CHAT_PORT) / Raw(load=message)
+        packet = IP(dst=PEER_IP) / ICMP(type=8) / Raw(load=message) # type 8 echo request
         send(packet, iface=INTERFACE, verbose=False)
         time.sleep(0.1)  # Small delay to prevent overwhelming the network
 
@@ -28,14 +27,14 @@ def receive_messages():
         # Filter packets: UDP, from peer, to us, on the correct port
         return (IP in pkt and UDP in pkt and
                 pkt[IP].src == PEER_IP and pkt[IP].dst == MY_IP and
-                pkt[UDP].sport == CHAT_PORT and pkt[UDP].dport == CHAT_PORT)
+                pkt[ICMP].type == 8)
 
     def handle_packet(pkt):
         if Raw in pkt:
             print(f"\nPeer: {pkt[Raw].load.decode('utf-8', errors='ignore')}\nYou: ", end="")
 
     # Sniff packets matching the filter
-    sniff(iface=INTERFACE, filter=f"udp port {CHAT_PORT}", prn=handle_packet, lfilter=packet_filter)
+    sniff(iface=INTERFACE, filter="icmp", prn=handle_packet, lfilter=packet_filter)
 
 # Main function to start the chat
 def main():
