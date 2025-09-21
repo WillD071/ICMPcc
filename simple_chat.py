@@ -4,9 +4,8 @@ import threading
 import time
 
 # Configuration
-MY_IP = "192.168.80.131"  # Replace with your local IP
-PEER_IP = "192.168.80.132"  # Replace with the peer's IP
-CHAT_PORT = 12345  # UDP port for chat
+MY_IP = "192.168.192.243"  # Replace with your local IP
+PEER_IP = "192.168.206.223"  # Replace with the peer's IP
 INTERFACE = "ens33"  # Replace with your network interface (e.g., "wlan0", "en0")
 
 # Function to send chat messages
@@ -39,7 +38,7 @@ def receive_messages():
 # Main function to start the chat
 def main():
     print("Starting bidirectional chat. Type 'exit' to quit.")
-    print(f"Chatting with {PEER_IP} on port {CHAT_PORT} via {INTERFACE}")
+    print(f"Chatting with {PEER_IP} via {INTERFACE}")
 
     # Start the receiver in a separate thread
     receiver_thread = threading.Thread(target=receive_messages, daemon=True)
