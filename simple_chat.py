@@ -6,7 +6,7 @@ import time
 # Configuration
 MY_IP = "192.168.192.243"  # Replace with your local IP
 PEER_IP = "192.168.206.223"  # Replace with the peer's IP
-INTERFACE = "ens33"  # Replace with your network interface (e.g., "wlan0", "en0")
+INTERFACE = "ens192"  # Replace with your network interface (e.g., "wlan0", "en0")
 
 # Function to send chat messages
 def send_messages():
